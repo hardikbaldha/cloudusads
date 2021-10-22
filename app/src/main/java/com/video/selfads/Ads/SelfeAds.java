@@ -80,7 +80,7 @@ public class SelfeAds {
     public static String fullfail = "";
     static MediaPlayer mediaPlayer;
     public static MediaLoader mMediaLoader;
-    public static boolean isGoogleInterstitialLoaded;
+    public static boolean isSelfInterstitialLoaded;
     public static boolean ismute = true;
 
     public SelfeAds(Activity activity1) {
@@ -134,7 +134,7 @@ public class SelfeAds {
         if (interTitialArrays.size() == 00) {
             Log.e(TAG, "showSelfNative: ");
         } else {
-            if (isGoogleInterstitialLoaded) {
+            if (isSelfInterstitialLoaded) {
                 SelfeAds.activity = activity;
                 showDialog(SelfeAds.activity,fullScreenContentCallback);
             }else {
@@ -424,18 +424,18 @@ public class SelfeAds {
     }
 
     public static void preloadSelfInterstitialAd() {
-        if (isGoogleInterstitialLoaded) {
+        if (isSelfInterstitialLoaded) {
             return;
         }
         if (interTitialArrays.size() == 0) {
             Log.e(TAG, "preloadSelfNativeAd: ");
         } else {
             selfInterstitialAds = new SelfInterstitialAds(activity);
-            isGoogleInterstitialLoaded = true;
+            isSelfInterstitialLoaded = true;
             selfInterstitialAds.load(activity, new InterstitialAdLoadCallback() {
                 @Override
                 public void onAdLoaded() {
-                    isGoogleInterstitialLoaded = true;
+                    isSelfInterstitialLoaded = true;
                     Log.e(TAG, "Native Load :- ");
                 }
 
