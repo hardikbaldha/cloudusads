@@ -1,6 +1,7 @@
 package com.video.selfads.retrofit;
 
 import com.video.selfads.model.GetAdsResponse;
+import com.video.selfads.model.ImpressionAdsResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -16,6 +17,13 @@ public interface APIService {
     @FormUrlEncoded
     Call<GetAdsResponse> APIGetAdsBy(@Url String str,
                                      @Field("p_name") String p_name);
+
+    @POST
+    @FormUrlEncoded
+    Call<ImpressionAdsResponse> ImpressionAdsBy(@Url String str,
+                                                @Field("id") int id,
+                                                @Field("tag") int tag,
+                                                @Field("p_name") String p_name);
 
 
 }
