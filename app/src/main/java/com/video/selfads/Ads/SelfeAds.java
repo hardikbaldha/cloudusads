@@ -28,7 +28,7 @@ import com.bumptech.glide.Glide;
 import com.video.selfads.Ads.full.FullScreenContentCallback;
 import com.video.selfads.Ads.full.InterstitialAdLoadCallback;
 import com.video.selfads.Ads.full.SelfInterstitialAds;
-import com.video.selfads.OnInitializCompleteListener;
+import com.video.selfads.OnInitializedSelfCompleteListener;
 import com.video.selfads.R;
 import com.video.selfads.model.GetAdsResponse;
 import com.video.selfads.model.ImpressionAdsResponse;
@@ -95,19 +95,23 @@ public class SelfeAds {
         return instance;
     }
 
-    public static void initialize(Activity activity, String PackageID, OnInitializCompleteListener onInitializCompleteListener) {
+    public static void initialize(Activity activity, String PackageID, OnInitializedSelfCompleteListener onInitializCompleteListener) {
 
         PackageName = PackageID;
         ApiUtils.getAPIService(APIContent.MainUrl).APIGetAdsBy(APIContent.GetAds, PackageID).enqueue(new Callback<GetAdsResponse>() {
             @Override
             public void onResponse(@NonNull Call<GetAdsResponse> call, @NonNull Response<GetAdsResponse> response) {
                 if (response.isSuccessful()) {
-                    onInitializCompleteListener.onInitializComplete(true, response.body().getMeAge());
-                    SelfeAds.InfoLink = response.body().getInfoLink();
-                    SelfeAds.skip_sec = response.body().getSkip_sec();
-                    full_pos = randomItemFull(response.body().getInterTitialArray());
-                    SelfeAds.Full = response.body().getInterTitialArray().get(full_pos).getVideo();
-                    SelfeAds.getInstance(activity).preloadSelfAds(response.body().getNativeArray(), response.body().getInterTitialArray());
+                    if (response.body().getInterTitialArray().size() == 00) {
+                        Log.e(TAG, "null: " + response.body().getInterTitialArray().size());
+                    } else {
+                        onInitializCompleteListener.oninitializselfcomplete(true, response.body().getMeAge());
+                        SelfeAds.InfoLink = response.body().getInfoLink();
+                        SelfeAds.skip_sec = response.body().getSkip_sec();
+                        full_pos = randomItemFull(response.body().getInterTitialArray());
+                        SelfeAds.Full = response.body().getInterTitialArray().get(full_pos).getVideo();
+                        SelfeAds.getInstance(activity).preloadSelfAds(response.body().getNativeArray(), response.body().getInterTitialArray());
+                    }
                 }
 
             }
@@ -117,7 +121,7 @@ public class SelfeAds {
                 SelfeAds.nativefail = t.getMessage();
                 SelfeAds.fullfail = t.getMessage();
                 Log.e(TAG, "onFailure: " + t.getMessage());
-                onInitializCompleteListener.onInitializComplete(false, t.getMessage());
+                onInitializCompleteListener.oninitializselfcomplete(false, t.getMessage());
             }
         });
     }
