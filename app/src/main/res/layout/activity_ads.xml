@@ -101,7 +101,8 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:adjustViewBounds="true"
-                android:src="@drawable/mute" />
+                android:src="@drawable/mute"
+                android:visibility="gone" />
 
         </RelativeLayout>
 

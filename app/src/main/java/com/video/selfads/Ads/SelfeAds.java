@@ -332,6 +332,7 @@ public class SelfeAds {
                             mediaPlayer = mp;
                             mediaPlayer.setVolume(0, 0);
                             imageView.setVisibility(View.GONE);
+                            im_vol.setVisibility(View.VISIBLE);
                         }
                     });
                     videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
