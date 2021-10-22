@@ -101,8 +101,14 @@ public class SelfeAds {
         ApiUtils.getAPIService(APIContent.MainUrl).APIGetAdsBy(APIContent.GetAds, PackageID).enqueue(new Callback<GetAdsResponse>() {
             @Override
             public void onResponse(@NonNull Call<GetAdsResponse> call, @NonNull Response<GetAdsResponse> response) {
+                if (response.body() == null) {
+                    onInitializCompleteListener.oninitializselfcomplete(false, "null");
+                    return;
+                }
+
                 if (response.isSuccessful()) {
                     if (response.body().getInterTitialArray().size() == 00) {
+                        onInitializCompleteListener.oninitializselfcomplete(false, response.body().getMeAge());
                         Log.e(TAG, "null: " + response.body().getInterTitialArray().size());
                     } else {
                         onInitializCompleteListener.oninitializselfcomplete(true, response.body().getMeAge());
@@ -112,6 +118,8 @@ public class SelfeAds {
                         SelfeAds.Full = response.body().getInterTitialArray().get(full_pos).getVideo();
                         SelfeAds.getInstance(activity).preloadSelfAds(response.body().getNativeArray(), response.body().getInterTitialArray());
                     }
+                } else {
+                    onInitializCompleteListener.oninitializselfcomplete(false, response.body().getMeAge());
                 }
 
             }
@@ -140,8 +148,8 @@ public class SelfeAds {
         } else {
             if (isSelfInterstitialLoaded) {
                 SelfeAds.activity = activity;
-                showDialog(SelfeAds.activity,fullScreenContentCallback);
-            }else {
+                showDialog(SelfeAds.activity, fullScreenContentCallback);
+            } else {
                 fullScreenContentCallback.onclose();
             }
         }
@@ -234,18 +242,18 @@ public class SelfeAds {
         Glide.with(activity).load(interTitialArrays.get(full_pos).getIcon()).into(im_app_icon);
         Glide.with(activity).load(interTitialArrays.get(full_pos).getImage()).into(imageView);
 
-        ApiCall(1,interTitialArrays.get(full_pos).getId());
+        ApiCall(1, interTitialArrays.get(full_pos).getId());
 
         ca_view.setCardBackgroundColor(Color.parseColor(interTitialArrays.get(full_pos).getColor()));
 
         ca_view.setOnClickListener(v -> {
-            ApiCall(2,interTitialArrays.get(full_pos).getId());
+            ApiCall(2, interTitialArrays.get(full_pos).getId());
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + interTitialArrays.get(full_pos).getpName()));
             activity.startActivity(intent);
         });
 
         li_main.setOnClickListener(v -> {
-            ApiCall(2,interTitialArrays.get(full_pos).getId());
+            ApiCall(2, interTitialArrays.get(full_pos).getId());
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + interTitialArrays.get(full_pos).getpName()));
             activity.startActivity(intent);
         });
@@ -399,14 +407,15 @@ public class SelfeAds {
         dialog.show();
     }
 
-    private static void ApiCall(int tag,int id) {
-        ApiUtils.getAPIService(APIContent.MainUrl).ImpressionAdsBy(APIContent.ImpressionAds,id, tag,PackageName).enqueue(new Callback<ImpressionAdsResponse>() {
+    private static void ApiCall(int tag, int id) {
+        ApiUtils.getAPIService(APIContent.MainUrl).ImpressionAdsBy(APIContent.ImpressionAds, id, tag, PackageName).enqueue(new Callback<ImpressionAdsResponse>() {
             @Override
             public void onResponse(@NonNull Call<ImpressionAdsResponse> call, @NonNull Response<ImpressionAdsResponse> response) {
                 if (response.isSuccessful()) {
 
                 }
             }
+
             @Override
             public void onFailure(@NonNull Call<ImpressionAdsResponse> call, @NonNull Throwable t) {
                 Log.e(TAG, "onFailure: " + t.getMessage());
@@ -545,7 +554,7 @@ public class SelfeAds {
             TextView ad_store = view.findViewById(R.id.ad_store);
             TextView ad_advertiser = view.findViewById(R.id.ad_advertiser);
 
-            ApiCall(1,nativeArrayArrayList.get(native_pos).getId());
+            ApiCall(1, nativeArrayArrayList.get(native_pos).getId());
 
 
             im_open_link.setOnClickListener(v -> {
@@ -560,7 +569,7 @@ public class SelfeAds {
             ad_call_to_action.setBackgroundColor(Color.parseColor(nativeArrayArrayList.get(full_pos).getColor()));
 
             ad_call_to_action.setOnClickListener(v -> {
-                ApiCall(2,nativeArrayArrayList.get(native_pos).getId());
+                ApiCall(2, nativeArrayArrayList.get(native_pos).getId());
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + nativeArrayArrayList.get(full_pos).getpName()));
                 activity.startActivity(intent);
             });
