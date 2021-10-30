@@ -79,9 +79,13 @@ public class SelfeAds {
     public static int full_pos;
     public static String fullfail = "";
     static MediaPlayer mediaPlayer;
+    static MediaPlayer mediaPlayer_native;
     public static MediaLoader mMediaLoader;
     public static boolean isSelfInterstitialLoaded;
     public static boolean ismute = true;
+    public static boolean ismute_native = true;
+
+    public static boolean NativeShow;
 
     public SelfeAds(Activity activity1) {
         activity = activity1;
@@ -119,9 +123,8 @@ public class SelfeAds {
                         SelfeAds.getInstance(activity).preloadSelfAds(response.body().getNativeArray(), response.body().getInterTitialArray());
                     }
                 } else {
-                    onInitializCompleteListener.oninitializselfcomplete(false, response.body().getMeAge());
+                    onInitializCompleteListener.oninitializselfcomplete(false, "");
                 }
-
             }
 
             @Override
@@ -144,7 +147,7 @@ public class SelfeAds {
 
     public static void showSelfInterstitial(Activity activity, FullScreenContentCallback fullScreenContentCallback) {
         if (interTitialArrays.size() == 00) {
-            Log.e(TAG, "showSelfNative: ");
+            Log.e(TAG, "NotSelfFull: ");
         } else {
             if (isSelfInterstitialLoaded) {
                 SelfeAds.activity = activity;
@@ -546,6 +549,7 @@ public class SelfeAds {
             ScalableVideoView ad_media = view.findViewById(R.id.ad_media);
             TextView ad_headline = view.findViewById(R.id.ad_headline);
             TextView ad_body = view.findViewById(R.id.ad_body);
+            ImageView im_vol_native = view.findViewById(R.id.im_vol_native);
             TextView ad_call_to_action = view.findViewById(R.id.ad_call_to_action);
             ImageView ad_app_icon = view.findViewById(R.id.ad_app_icon);
             ImageView im_open_link = view.findViewById(R.id.im_open_link);
@@ -581,7 +585,7 @@ public class SelfeAds {
             if (Native == null) {
                 Glide.with(activity).load(nativeArrayArrayList.get(native_pos).getImage()).into(main_image);
             } else {
-                VideoLoad(main_image, ad_media, nativeArrayArrayList);
+                VideoLoad(main_image, ad_media, nativeArrayArrayList,im_vol_native);
             }
             ad_layout.addView(view);
         } catch (Exception e) {
@@ -589,7 +593,7 @@ public class SelfeAds {
         }
     }
 
-    public static void VideoLoad(ImageView imageView, ScalableVideoView videoView, ArrayList<NativeArray> nativeArrayArrayList) {
+    public static void VideoLoad(ImageView imageView, ScalableVideoView videoView, ArrayList<NativeArray> nativeArrayArrayList,ImageView im_vol_native) {
         Glide.with(activity).load(nativeArrayArrayList.get(native_pos).getImage()).into(imageView);
         MediaLoaderConfig mediaLoaderConfig = new MediaLoaderConfig.Builder(activity)
                 .cacheRootDir(DefaultConfigFactory.createCacheRootDir(activity, "your_cache_dir"))//directory for cached files
@@ -637,9 +641,10 @@ public class SelfeAds {
                             videoView.setLooping(false);
                             videoView.start();
                             mp.setLooping(false);
-                           /* mpnew = mp;
-                            mpnew.setVolume(0, 0);*/
+                            mediaPlayer_native = mp;
+                            mediaPlayer_native.setVolume(0, 0);
                             imageView.setVisibility(View.GONE);
+                            im_vol_native.setVisibility(View.VISIBLE);
                         }
                     });
                     videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -647,11 +652,30 @@ public class SelfeAds {
                         public void onCompletion(MediaPlayer mp) {
                             imageView.setVisibility(View.VISIBLE);
                             videoView.setVisibility(View.GONE);
+                            im_vol_native.setVisibility(View.GONE);
                         }
                     });
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+
+
+                im_vol_native.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (ismute_native) {
+                            mediaPlayer_native.setVolume(1, 1);
+                            ismute_native = false;
+                            im_vol_native.setImageResource(R.drawable.unmute);
+                        } else {
+                            mediaPlayer_native.setVolume(0, 0);
+                            ismute_native = true;
+                            im_vol_native.setImageResource(R.drawable.mute);
+                        }
+                    }
+                });
+
+
             }
         }).start();
     }

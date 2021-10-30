@@ -150,15 +150,7 @@
                                             android:textSize="@dimen/_8ssp" />
                                     </androidx.cardview.widget.CardView>
 
-                                    <ImageView
-                                        android:id="@+id/im_open_link"
-                                        android:layout_width="@dimen/_20sdp"
-                                        android:layout_height="@dimen/_20sdp"
-                                        android:layout_alignParentEnd="true"
-                                        android:layout_marginTop="@dimen/_8sdp"
-                                        android:layout_marginEnd="@dimen/_8sdp"
-                                        android:adjustViewBounds="true"
-                                        android:src="@drawable/info" />
+
 
                                     <com.yqritc.scalablevideoview.ScalableVideoView
                                         android:id="@+id/ad_media"
@@ -171,6 +163,27 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         app:scalableType="fitCenter" />
+
+                                    <ImageView
+                                        android:id="@+id/im_open_link"
+                                        android:layout_width="@dimen/_25sdp"
+                                        android:layout_height="@dimen/_25sdp"
+                                        android:layout_alignParentEnd="true"
+                                        android:layout_marginTop="@dimen/_8sdp"
+                                        android:layout_marginEnd="@dimen/_8sdp"
+                                        android:adjustViewBounds="true"
+                                        android:src="@drawable/info" />
+
+                                    <ImageView
+                                        android:id="@+id/im_vol_native"
+                                        android:visibility="gone"
+                                        android:layout_width="@dimen/_25sdp"
+                                        android:layout_height="@dimen/_25sdp"
+                                        android:layout_alignParentEnd="true"
+                                        android:layout_marginTop="@dimen/_8sdp"
+                                        android:layout_marginEnd="@dimen/_43sdp"
+                                        android:adjustViewBounds="true"
+                                        android:src="@drawable/mute" />
 
 
 
