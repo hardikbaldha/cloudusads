@@ -1,7 +1,7 @@
 package com.video.selfads.Ads.full;
 
 import android.app.Activity;
-import static com.video.selfads.Ads.SelfeAds.fullfail;
+import static com.video.selfads.Ads.SelfeAds.full_fail;
 import static com.video.selfads.Ads.SelfeAds.isSelfNativeLoaded;
 
 public class SelfInterstitialAds {
@@ -19,7 +19,7 @@ public class SelfInterstitialAds {
         if (isSelfNativeLoaded){
             SelfInterstitialAds.interstitialAdLoadCallback.onAdLoaded();
         }else {
-            SelfInterstitialAds.interstitialAdLoadCallback.onAdFailedToLoad("fail : " + fullfail);
+            SelfInterstitialAds.interstitialAdLoadCallback.onAdFailedToLoad("fail : " + full_fail);
         }
     }
 
