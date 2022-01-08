@@ -1,4 +1,4 @@
-package com.video.selfads.Ads.Native;
+package com.video.selfads.Ads;
 
 public interface NativeContentCallback {
     void onAdDismissedFullScreenContent();

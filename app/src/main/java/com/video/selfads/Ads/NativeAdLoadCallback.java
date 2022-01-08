@@ -1,6 +1,6 @@
-package com.video.selfads.Ads.banner;
+package com.video.selfads.Ads;
 
-public interface BannerAdLoadCallback {
+public interface NativeAdLoadCallback {
     void onAdLoaded();
     void onAdClose();
     void onAdFailedToLoad(String text);

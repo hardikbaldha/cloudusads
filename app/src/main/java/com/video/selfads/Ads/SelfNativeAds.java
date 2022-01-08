@@ -1,7 +1,7 @@
-package com.video.selfads.Ads.Native;
+package com.video.selfads.Ads;
 
 import static com.video.selfads.Ads.SelfeAds.isSelfNativeLoaded;
-import static com.video.selfads.Ads.SelfeAds.native_fail;
+import static com.video.selfads.Ads.SelfeAds.nativefail;
 
 import android.app.Activity;
 
@@ -9,11 +9,11 @@ import com.vincan.medialoader.MediaLoader;
 
 public class SelfNativeAds {
     Activity activity;
-    NativeAdLoadCallback nativeAdLoadCallback;
+NativeAdLoadCallback nativeAdLoadCallback;
     boolean isLoaded;
     private MediaLoader mMediaLoader;
     //    ArrayList<NativeArray> nativeArrays = new ArrayList<>();
-    private NativeContentCallback nativeContentCallback;
+    private com.video.selfads.Ads.NativeContentCallback nativeContentCallback;
 
 
     public SelfNativeAds(Activity activity) {
@@ -23,16 +23,17 @@ public class SelfNativeAds {
     public void load(Activity activity, NativeAdLoadCallback nativeAdLoadCallback) {
         this.activity = activity;
         this.nativeAdLoadCallback = nativeAdLoadCallback;
-        if (isSelfNativeLoaded) {
+        if (isSelfNativeLoaded){
             this.nativeAdLoadCallback.onAdLoaded();
-        } else {
-            this.nativeAdLoadCallback.onAdFailedToLoad("fail : " + native_fail);
+        }else {
+            this.nativeAdLoadCallback.onAdFailedToLoad("fail : " + nativefail);
         }
     }
 
     public boolean isLoaded() {
         return isLoaded;
     }
+
 
 
     public NativeContentCallback getNativeContentCallback() {
