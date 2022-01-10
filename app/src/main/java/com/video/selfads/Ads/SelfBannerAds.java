@@ -8,10 +8,6 @@ import android.app.Activity;
 public class SelfBannerAds {
     Activity activity;
     BannerAdLoadCallback bannerAdLoadCallback;
-    boolean isLoaded;
-    //    ArrayList<NativeArray> nativeArrays = new ArrayList<>();
-    private BannerContentCallback bannerContentCallback;
-
 
     public SelfBannerAds(Activity activity) {
         this.activity = activity;
@@ -27,16 +23,8 @@ public class SelfBannerAds {
         }
     }
 
-    public boolean isLoaded() {
-        return isLoaded;
-    }
 
 
-    public BannerContentCallback getBannerContentCallback() {
-        return bannerContentCallback;
-    }
 
-    public void setBannerContentCallback(BannerContentCallback bannerContentCallback) {
-        this.bannerContentCallback = bannerContentCallback;
-    }
+
 }
