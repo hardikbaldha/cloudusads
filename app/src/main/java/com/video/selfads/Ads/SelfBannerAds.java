@@ -36,7 +36,7 @@ public class SelfBannerAds {
         return bannerContentCallback;
     }
 
-    public void setNativeContentCallback(BannerContentCallback bannerContentCallback) {
+    public void setBannerContentCallback(BannerContentCallback bannerContentCallback) {
         this.bannerContentCallback = bannerContentCallback;
     }
 }
