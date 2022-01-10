@@ -523,7 +523,7 @@ public class SelfeAds {
     }
 
 
-    public static void showSelfNative(FrameLayout layout, Activity activity) {
+    public static void showSelfNative(LinearLayout layout, Activity activity) {
         if (nativeArrays.size() == 00) {
             Log.e(TAG, "showSelfNative: ");
         } else {
@@ -540,7 +540,7 @@ public class SelfeAds {
     }
 
     @SuppressLint("SetTextI18n")
-    public static void inflateSelfNative(FrameLayout ad_layout, ArrayList<NativeArray> nativeArrayArrayList) {
+    public static void inflateSelfNative(LinearLayout ad_layout, ArrayList<NativeArray> nativeArrayArrayList) {
         try {
             ad_layout.setVisibility(View.VISIBLE);
             LayoutInflater inflater = LayoutInflater.from(activity);
