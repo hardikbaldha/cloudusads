@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -25,6 +26,8 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 
 import com.bumptech.glide.Glide;
+import com.video.selfads.Ads.Native.NativeAdLoadCallback;
+import com.video.selfads.Ads.Native.SelfNativeAds;
 import com.video.selfads.Ads.full.FullScreenContentCallback;
 import com.video.selfads.Ads.full.InterstitialAdLoadCallback;
 import com.video.selfads.Ads.full.SelfInterstitialAds;
@@ -54,22 +57,36 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SelfeAds {
+    private static final String TAG = "Selfe_Ads";
+
     public static SelfeAds instance;
     public static Activity activity;
     public static String InfoLink = "";
     public static int skip_sec;
-
-    private static final String TAG = "Selfe_Ads";
-
+    static MediaPlayer mediaPlayer;
+    static MediaPlayer mediaPlayer_native;
+    public static MediaLoader mMediaLoader;
+    public static boolean is_mute = true;
+    public static boolean is_mute_native = true;
 
     // Native
     public static SelfNativeAds selfNativeAds;
-    public static ArrayList<NativeArray> nativeArrays = new ArrayList<>();
     public static int native_pos;
     public static String Native = "";
-    public static boolean isSelfNativeLoaded;
+    public static ArrayList<NativeArray> nativeArrays = new ArrayList<>();
 
-    public static String nativefail = "";
+    // Banner
+    public static ArrayList<NativeArray> bannerArrays = new ArrayList<>();
+    public static int banner_pos;
+
+    // Tag
+    public static boolean isSelfNativeLoaded;
+    public static boolean isSelfBannerLoaded;
+    public static boolean isSelfInterstitialLoaded;
+
+    public static String native_fail = "";
+    public static String banner_fail = "";
+    public static String full_fail = "";
 
     // Full
     public static SelfInterstitialAds selfInterstitialAds;
@@ -77,15 +94,7 @@ public class SelfeAds {
     public static String Full = "";
     public static ArrayList<InterTitialArray> interTitialArrays = new ArrayList<>();
     public static int full_pos;
-    public static String fullfail = "";
-    static MediaPlayer mediaPlayer;
-    static MediaPlayer mediaPlayer_native;
-    public static MediaLoader mMediaLoader;
-    public static boolean isSelfInterstitialLoaded;
-    public static boolean ismute = true;
-    public static boolean ismute_native = true;
 
-    public static boolean NativeShow;
 
     public SelfeAds(Activity activity1) {
         activity = activity1;
@@ -100,9 +109,8 @@ public class SelfeAds {
     }
 
     public static void initialize(Activity activity, String PackageID, OnInitializedSelfCompleteListener onInitializCompleteListener) {
-
         PackageName = PackageID;
-        ApiUtils.getAPIService(APIContent.MainUrl).APIGetAdsBy(APIContent.GetAds, PackageID).enqueue(new Callback<GetAdsResponse>() {
+        ApiUtils.getAPIService(APIContent.MainUrl).APIGetAdsBy(APIContent.GetAds, PackageName).enqueue(new Callback<GetAdsResponse>() {
             @Override
             public void onResponse(@NonNull Call<GetAdsResponse> call, @NonNull Response<GetAdsResponse> response) {
                 if (response.body() == null) {
@@ -129,8 +137,9 @@ public class SelfeAds {
 
             @Override
             public void onFailure(@NonNull Call<GetAdsResponse> call, @NonNull Throwable t) {
-                SelfeAds.nativefail = t.getMessage();
-                SelfeAds.fullfail = t.getMessage();
+                SelfeAds.native_fail = t.getMessage();
+                SelfeAds.full_fail = t.getMessage();
+                SelfeAds.banner_fail = t.getMessage();
                 Log.e(TAG, "onFailure: " + t.getMessage());
                 onInitializCompleteListener.oninitializselfcomplete(false, t.getMessage());
             }
@@ -140,21 +149,24 @@ public class SelfeAds {
 
     public void preloadSelfAds(ArrayList<NativeArray> nativeArrays, ArrayList<InterTitialArray> interTitialArrays) {
         SelfeAds.nativeArrays = nativeArrays;
+        SelfeAds.bannerArrays = nativeArrays;
         SelfeAds.interTitialArrays = interTitialArrays;
+        preloadSelfBannerAd();
         preloadSelfNativeAd();
         preloadSelfInterstitialAd();
     }
 
     public static void showSelfInterstitial(Activity activity, FullScreenContentCallback fullScreenContentCallback) {
-        if (interTitialArrays.size() == 00) {
-            Log.e(TAG, "NotSelfFull: ");
-        } else {
+        boolean INTERSTITIALLY = interTitialArrays.isEmpty();
+        if (!INTERSTITIALLY) {
             if (isSelfInterstitialLoaded) {
                 SelfeAds.activity = activity;
                 showDialog(SelfeAds.activity, fullScreenContentCallback);
             } else {
                 fullScreenContentCallback.onclose();
             }
+        } else {
+            Log.e(TAG, "NotSelfFull: ");
         }
 
 //        com.google.android.gms.ads.interstitial.InterstitialAd googleInterstitial = googleInterstitialAd;
@@ -373,13 +385,13 @@ public class SelfeAds {
         im_vol.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ismute) {
+                if (is_mute) {
                     mediaPlayer.setVolume(1, 1);
-                    ismute = false;
+                    is_mute = false;
                     im_vol.setImageResource(R.drawable.unmute);
                 } else {
                     mediaPlayer.setVolume(0, 0);
-                    ismute = true;
+                    is_mute = true;
                     im_vol.setImageResource(R.drawable.mute);
                 }
             }
@@ -435,6 +447,13 @@ public class SelfeAds {
     }
 
     public static int randomItemNative(ArrayList<NativeArray> arr_data) {
+        Random random = new Random();
+        int index = random.nextInt(arr_data.size());
+        return index;
+    }
+
+
+    public static int randomItemBanner(ArrayList<NativeArray> arr_data) {
         Random random = new Random();
         int index = random.nextInt(arr_data.size());
         return index;
@@ -522,8 +541,56 @@ public class SelfeAds {
 
     }
 
+    @SuppressLint("MissingPermission")
+    public static void preloadSelfBannerAd() {
+        if (isSelfBannerLoaded) {
+            return;
+        }
+        if (bannerArrays.size() == 0) {
+            Log.e(TAG, "preloadSelfNativeAd: ");
+            return;
+        } else {
+            banner_pos = randomItemBanner(bannerArrays);
 
-    public static void showSelfNative(LinearLayout layout, Activity activity) {
+            selfNativeAds = new SelfNativeAds(activity);
+            isSelfBannerLoaded = true;
+            selfNativeAds.load(activity, new NativeAdLoadCallback() {
+                @Override
+                public void onAdLoaded() {
+                    isSelfBannerLoaded = true;
+                }
+
+                @Override
+                public void onAdClose() {
+                }
+
+                @Override
+                public void onAdFailedToLoad(String text) {
+                    Log.e(TAG, "Banner Fail" + text);
+                }
+            });
+        }
+
+    }
+
+
+    public static void showSelfBanner(FrameLayout layout, Activity activity) {
+        if (bannerArrays.size() == 0) {
+            Log.e(TAG, "showSelfNative: ");
+        } else {
+            if (layout != null) {
+                layout.removeAllViews();
+                if (isSelfBannerLoaded) {
+                    SelfeAds.activity = activity;
+                    banner_pos = randomItemBanner(bannerArrays);
+                    inflateSelfBanner(layout, bannerArrays);
+                }
+                preloadSelfBannerAd();
+            }
+        }
+    }
+
+    public static void showSelfNative(FrameLayout layout, Activity activity) {
         if (nativeArrays.size() == 00) {
             Log.e(TAG, "showSelfNative: ");
         } else {
@@ -540,11 +607,11 @@ public class SelfeAds {
     }
 
     @SuppressLint("SetTextI18n")
-    public static void inflateSelfNative(LinearLayout ad_layout, ArrayList<NativeArray> nativeArrayArrayList) {
+    public static void inflateSelfNative(FrameLayout ad_layout, ArrayList<NativeArray> nativeArrayArrayList) {
         try {
             ad_layout.setVisibility(View.VISIBLE);
             LayoutInflater inflater = LayoutInflater.from(activity);
-            View view = inflater.inflate(R.layout.common_admob_native, null);
+            View view = inflater.inflate(R.layout.common_self_native, null);
 
             ScalableVideoView ad_media = view.findViewById(R.id.ad_media);
             TextView ad_headline = view.findViewById(R.id.ad_headline);
@@ -568,7 +635,6 @@ public class SelfeAds {
             });
             ad_headline.setText(nativeArrayArrayList.get(native_pos).getDeC());
             ad_body.setText(nativeArrayArrayList.get(native_pos).getAppName());
-            ad_call_to_action.setText("Install");
             ad_store.setText(nativeArrayArrayList.get(native_pos).getAppName());
             ad_advertiser.setText(nativeArrayArrayList.get(native_pos).getAppName());
             ad_call_to_action.setBackgroundColor(Color.parseColor(nativeArrayArrayList.get(full_pos).getColor()));
@@ -585,15 +651,58 @@ public class SelfeAds {
             if (Native == null) {
                 Glide.with(activity).load(nativeArrayArrayList.get(native_pos).getImage()).into(main_image);
             } else {
-                VideoLoad(main_image, ad_media, nativeArrayArrayList,im_vol_native);
+                VideoLoad(main_image, ad_media, nativeArrayArrayList, im_vol_native);
             }
+            ad_layout.addView(view);
+        } catch (Exception e) {
+            Log.e("AAA", "inflateSelfNative: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+
+    @SuppressLint("SetTextI18n")
+    public static void inflateSelfBanner(FrameLayout ad_layout, ArrayList<NativeArray> bannerArrayArrayList) {
+        try {
+            ad_layout.setVisibility(View.VISIBLE);
+            LayoutInflater inflater = LayoutInflater.from(activity);
+            View view = inflater.inflate(R.layout.common_self_nativebanner, null);
+
+
+            ImageView ad_media = view.findViewById(R.id.ad_media_banner);
+            TextView ad_headline = view.findViewById(R.id.ad_name);
+            TextView ad_body = view.findViewById(R.id.ad_body);
+            TextView ad_call_to_action = view.findViewById(R.id.ad_call_to_action);
+
+            ImageView im_open_link = view.findViewById(R.id.im_open_link);
+
+            ApiCall(1, bannerArrayArrayList.get(banner_pos).getId());
+
+
+            im_open_link.setOnClickListener(v -> {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(SelfeAds.InfoLink));
+                activity.startActivity(intent);
+            });
+            ad_headline.setText(bannerArrayArrayList.get(banner_pos).getAppName());
+            ad_body.setText(bannerArrayArrayList.get(banner_pos).getDeC());
+            ad_call_to_action.setText("Install");
+            ad_call_to_action.setBackgroundColor(Color.parseColor(bannerArrayArrayList.get(banner_pos).getColor()));
+
+            ad_call_to_action.setOnClickListener(v -> {
+                ApiCall(2, bannerArrayArrayList.get(banner_pos).getId());
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + bannerArrayArrayList.get(full_pos).getpName()));
+                activity.startActivity(intent);
+            });
+
+            Glide.with(activity).load(bannerArrayArrayList.get(banner_pos).getImage()).into(ad_media);
+
             ad_layout.addView(view);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static void VideoLoad(ImageView imageView, ScalableVideoView videoView, ArrayList<NativeArray> nativeArrayArrayList,ImageView im_vol_native) {
+    public static void VideoLoad(ImageView imageView, ScalableVideoView videoView, ArrayList<NativeArray> nativeArrayArrayList, ImageView im_vol_native) {
         Glide.with(activity).load(nativeArrayArrayList.get(native_pos).getImage()).into(imageView);
         MediaLoaderConfig mediaLoaderConfig = new MediaLoaderConfig.Builder(activity)
                 .cacheRootDir(DefaultConfigFactory.createCacheRootDir(activity, "your_cache_dir"))//directory for cached files
@@ -663,19 +772,17 @@ public class SelfeAds {
                 im_vol_native.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (ismute_native) {
+                        if (is_mute_native) {
                             mediaPlayer_native.setVolume(1, 1);
-                            ismute_native = false;
+                            is_mute_native = false;
                             im_vol_native.setImageResource(R.drawable.unmute);
                         } else {
                             mediaPlayer_native.setVolume(0, 0);
-                            ismute_native = true;
+                            is_mute_native = true;
                             im_vol_native.setImageResource(R.drawable.mute);
                         }
                     }
                 });
-
-
             }
         }).start();
     }
