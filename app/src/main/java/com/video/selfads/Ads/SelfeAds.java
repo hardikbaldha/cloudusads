@@ -156,7 +156,7 @@ public class SelfeAds {
         SelfeAds.nativeArrays = nativeArrays;
         SelfeAds.bannerArrays = nativeArrays;
         SelfeAds.interTitialArrays = interTitialArrays;
-        preloadSelfBannerAd();
+//        preloadSelfBannerAd();
         preloadSelfNativeAd();
         preloadSelfInterstitialAd();
     }
@@ -546,63 +546,63 @@ public class SelfeAds {
 
     }
 
-    @SuppressLint("MissingPermission")
-    public static void preloadSelfBannerAd() {
-        if (isSelfBannerLoaded) {
-            return;
-        }
-        if (bannerArrays.size() == 0) {
-            Log.e(TAG, "preloadSelfNativeAd: ");
-            return;
-        } else {
-            banner_pos = randomItemBanner(bannerArrays);
-            isSelfBannerLoaded = true;
-            load(activity, new BannerAdLoadCallback() {
-                @Override
-                public void onAdLoaded() {
-                    isSelfBannerLoaded = true;
-                }
+//    @SuppressLint("MissingPermission")
+//    public static void preloadSelfBannerAd() {
+//        if (isSelfBannerLoaded) {
+//            return;
+//        }
+//        if (bannerArrays.size() == 0) {
+//            Log.e(TAG, "preloadSelfNativeAd: ");
+//            return;
+//        } else {
+//            banner_pos = randomItemBanner(bannerArrays);
+//            isSelfBannerLoaded = true;
+//            load(activity, new BannerAdLoadCallback() {
+//                @Override
+//                public void onAdLoaded() {
+//                    isSelfBannerLoaded = true;
+//                }
+//
+//                @Override
+//                public void onAdClose() {
+//                }
+//
+//                @Override
+//                public void onAdFailedToLoad(String text) {
+//                    Log.e(TAG, "Banner Fail" + text);
+//                }
+//            });
+//        }
+//
+//
+//
+//    }
+//
+//    public static void load(Activity activity, BannerAdLoadCallback mbannerAdLoadCallback) {
+//        bannerAdLoadCallback = mbannerAdLoadCallback;
+//        if (isSelfBannerLoaded) {
+//            bannerAdLoadCallback.onAdLoaded();
+//        } else {
+//            bannerAdLoadCallback.onAdFailedToLoad("fail : " + banner_fail);
+//        }
+//    }
 
-                @Override
-                public void onAdClose() {
-                }
 
-                @Override
-                public void onAdFailedToLoad(String text) {
-                    Log.e(TAG, "Banner Fail" + text);
-                }
-            });
-        }
-
-
-
-    }
-
-    public static void load(Activity activity, BannerAdLoadCallback mbannerAdLoadCallback) {
-        bannerAdLoadCallback = mbannerAdLoadCallback;
-        if (isSelfBannerLoaded) {
-            bannerAdLoadCallback.onAdLoaded();
-        } else {
-            bannerAdLoadCallback.onAdFailedToLoad("fail : " + banner_fail);
-        }
-    }
-
-
-    public static void showSelfBanner(FrameLayout layout, Activity activity) {
-        if (bannerArrays.size() == 0) {
-            Log.e(TAG, "showSelfNative: ");
-        } else {
-            if (layout != null) {
-                layout.removeAllViews();
-                if (isSelfBannerLoaded) {
-                    SelfeAds.activity = activity;
-                    banner_pos = randomItemBanner(bannerArrays);
-                    inflateSelfBanner(layout, bannerArrays);
-                }
-                preloadSelfBannerAd();
-            }
-        }
-    }
+//    public static void showSelfBanner(FrameLayout layout, Activity activity) {
+//        if (bannerArrays.size() == 0) {
+//            Log.e(TAG, "showSelfNative: ");
+//        } else {
+//            if (layout != null) {
+//                layout.removeAllViews();
+//                if (isSelfBannerLoaded) {
+//                    SelfeAds.activity = activity;
+//                    banner_pos = randomItemBanner(bannerArrays);
+//                    inflateSelfBanner(layout, bannerArrays);
+//                }
+//                preloadSelfBannerAd();
+//            }
+//        }
+//    }
 
     public static void showSelfNative(FrameLayout layout, Activity activity) {
         if (nativeArrays.size() == 00) {
@@ -676,45 +676,45 @@ public class SelfeAds {
 
 
     @SuppressLint("SetTextI18n")
-    public static void inflateSelfBanner(FrameLayout ad_layout, ArrayList<NativeArray> bannerArrayArrayList) {
-        try {
-            ad_layout.setVisibility(View.VISIBLE);
-            LayoutInflater inflater = LayoutInflater.from(activity);
-            View view = inflater.inflate(R.layout.common_self_nativebanner, null);
-
-
-            ImageView ad_media = view.findViewById(R.id.ad_media);
-            TextView ad_headline = view.findViewById(R.id.ad_name);
-            TextView ad_body = view.findViewById(R.id.ad_body);
-            TextView ad_call_to_action = view.findViewById(R.id.ad_call_to_action);
-
-            ImageView im_open_link = view.findViewById(R.id.im_open_link);
-
-            ApiCall(1, bannerArrayArrayList.get(banner_pos).getId());
-
-
-            im_open_link.setOnClickListener(v -> {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(SelfeAds.InfoLink));
-                activity.startActivity(intent);
-            });
-            ad_headline.setText(bannerArrayArrayList.get(banner_pos).getAppName());
-            ad_body.setText(bannerArrayArrayList.get(banner_pos).getDeC());
-            ad_call_to_action.setText("Install");
-            ad_call_to_action.setBackgroundColor(Color.parseColor(bannerArrayArrayList.get(banner_pos).getColor()));
-
-            ad_call_to_action.setOnClickListener(v -> {
-                ApiCall(2, bannerArrayArrayList.get(banner_pos).getId());
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + bannerArrayArrayList.get(full_pos).getpName()));
-                activity.startActivity(intent);
-            });
-
-            Glide.with(activity).load(bannerArrayArrayList.get(banner_pos).getImage()).into(ad_media);
-
-            ad_layout.addView(view);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    public static void inflateSelfBanner(FrameLayout ad_layout, ArrayList<NativeArray> bannerArrayArrayList) {
+//        try {
+//            ad_layout.setVisibility(View.VISIBLE);
+//            LayoutInflater inflater = LayoutInflater.from(activity);
+//            View view = inflater.inflate(R.layout.common_self_nativebanner, null);
+//
+//
+//            ImageView ad_media = view.findViewById(R.id.ad_media);
+//            TextView ad_headline = view.findViewById(R.id.ad_name);
+//            TextView ad_body = view.findViewById(R.id.ad_body);
+//            TextView ad_call_to_action = view.findViewById(R.id.ad_call_to_action);
+//
+//            ImageView im_open_link = view.findViewById(R.id.im_open_link);
+//
+//            ApiCall(1, bannerArrayArrayList.get(banner_pos).getId());
+//
+//
+//            im_open_link.setOnClickListener(v -> {
+//                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(SelfeAds.InfoLink));
+//                activity.startActivity(intent);
+//            });
+//            ad_headline.setText(bannerArrayArrayList.get(banner_pos).getAppName());
+//            ad_body.setText(bannerArrayArrayList.get(banner_pos).getDeC());
+//            ad_call_to_action.setText("Install");
+//            ad_call_to_action.setBackgroundColor(Color.parseColor(bannerArrayArrayList.get(banner_pos).getColor()));
+//
+//            ad_call_to_action.setOnClickListener(v -> {
+//                ApiCall(2, bannerArrayArrayList.get(banner_pos).getId());
+//                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + bannerArrayArrayList.get(full_pos).getpName()));
+//                activity.startActivity(intent);
+//            });
+//
+//            Glide.with(activity).load(bannerArrayArrayList.get(banner_pos).getImage()).into(ad_media);
+//
+//            ad_layout.addView(view);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     public static void VideoLoad(ImageView imageView, ScalableVideoView videoView, ArrayList<NativeArray> nativeArrayArrayList, ImageView im_vol_native) {
         Glide.with(activity).load(nativeArrayArrayList.get(native_pos).getImage()).into(imageView);
