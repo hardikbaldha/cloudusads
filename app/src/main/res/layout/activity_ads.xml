@@ -95,14 +95,14 @@
 
             <ImageView
                 android:id="@+id/im_vol"
-                android:visibility="gone"
                 android:layout_width="@dimen/_25sdp"
                 android:layout_height="@dimen/_25sdp"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:adjustViewBounds="true"
-                android:src="@drawable/mute" />
+                android:src="@drawable/mute"
+                android:visibility="gone" />
 
         </RelativeLayout>
 

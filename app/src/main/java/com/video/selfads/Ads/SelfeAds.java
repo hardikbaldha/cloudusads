@@ -523,7 +523,7 @@ public class SelfeAds {
     }
 
 
-    public static void showSelfNativeFrameLayout layout, Activity activity) {
+    public static void showSelfNative(LinearLayout layout, Activity activity) {
         if (nativeArrays.size() == 00) {
             Log.e(TAG, "showSelfNative: ");
         } else {
