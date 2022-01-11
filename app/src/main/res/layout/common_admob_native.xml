@@ -1,7 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:id="@+id/re_main_layout"
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
@@ -42,6 +44,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/_45sdp"
+                            android:layout_marginEnd="@dimen/_20sdp"
                             android:layout_marginStart="@dimen/_4sdp"
                             android:layout_toStartOf="@id/ad_call_to_action"
                             android:orientation="vertical"
@@ -98,12 +101,13 @@
 
                         <TextView
                             android:id="@+id/ad_call_to_action"
-                            android:layout_width="wrap_content"
+                            android:layout_width="@dimen/_50sdp"
                             android:layout_height="@dimen/_25sdp"
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true"
                             android:background="@drawable/install_btn"
                             android:gravity="center"
+                            android:text="Install"
                             android:paddingLeft="@dimen/_8sdp"
                             android:paddingRight="@dimen/_8sdp"
                             android:textAllCaps="false"
@@ -123,84 +127,84 @@
                          app:layout_constraintStart_toStartOf="parent"
                          app:layout_constraintTop_toTopOf="parent" />-->
 
-                                <RelativeLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="@dimen/_200sdp"
-                                    android:layout_gravity="center"
-                                    android:foregroundGravity="center"
-                                    android:gravity="center"
-                                    android:orientation="horizontal"
-                                    android:layout_above="@id/icone">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_200sdp"
+                    android:layout_gravity="center"
+                    android:foregroundGravity="center"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:layout_above="@id/icone">
 
-                                    <androidx.cardview.widget.CardView
-                                        android:layout_width="@dimen/_20sdp"
-                                        android:layout_height="@dimen/_15ssp"
-                                        android:gravity="center"
-                                        android:layout_marginTop="@dimen/_8sdp"
-                                        android:layout_marginStart="@dimen/_8sdp"
-                                        app:cardBackgroundColor="#F44336">
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_15ssp"
+                        android:gravity="center"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        app:cardBackgroundColor="#F44336">
 
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:gravity="center"
-                                            android:layout_gravity="center"
-                                            android:text="AD"
-                                            android:textColor="#fff"
-                                            android:textSize="@dimen/_8ssp" />
-                                    </androidx.cardview.widget.CardView>
-
-
-
-                                    <com.yqritc.scalablevideoview.ScalableVideoView
-                                        android:id="@+id/ad_media"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="match_parent"
-                                        app:scalableType="fitCenter" />
-
-                                    <ImageView
-                                        android:id="@+id/main_image"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="match_parent"
-                                        app:scalableType="fitCenter" />
-
-                                    <ImageView
-                                        android:id="@+id/im_open_link"
-                                        android:layout_width="@dimen/_25sdp"
-                                        android:layout_height="@dimen/_25sdp"
-                                        android:layout_alignParentEnd="true"
-                                        android:layout_marginTop="@dimen/_8sdp"
-                                        android:layout_marginEnd="@dimen/_8sdp"
-                                        android:adjustViewBounds="true"
-                                        android:src="@drawable/info" />
-
-                                    <ImageView
-                                        android:id="@+id/im_vol_native"
-                                        android:visibility="gone"
-                                        android:layout_width="@dimen/_25sdp"
-                                        android:layout_height="@dimen/_25sdp"
-                                        android:layout_alignParentEnd="true"
-                                        android:layout_marginTop="@dimen/_8sdp"
-                                        android:layout_marginEnd="@dimen/_43sdp"
-                                        android:adjustViewBounds="true"
-                                        android:src="@drawable/mute" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:layout_gravity="center"
+                            android:text="AD"
+                            android:textColor="#fff"
+                            android:textSize="@dimen/_8ssp" />
+                    </androidx.cardview.widget.CardView>
 
 
 
-                                </RelativeLayout>
+                    <com.yqritc.scalablevideoview.ScalableVideoView
+                        android:id="@+id/ad_media"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:scalableType="fitCenter" />
 
-<!--                <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="@dimen/_200sdp"-->
-<!--                    android:layout_above="@id/icone">-->
+                    <ImageView
+                        android:id="@+id/main_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:scalableType="fitCenter" />
 
-<!--                    <com.video.selfads.TextureVideoView-->
-<!--                        android:id="@+id/ad_media"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="match_parent"-->
-<!--                        android:visibility="visible" />-->
+                    <ImageView
+                        android:id="@+id/im_open_link"
+                        android:layout_width="@dimen/_25sdp"
+                        android:layout_height="@dimen/_25sdp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:layout_marginEnd="@dimen/_8sdp"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/info" />
 
-<!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
+                    <ImageView
+                        android:id="@+id/im_vol_native"
+                        android:visibility="gone"
+                        android:layout_width="@dimen/_25sdp"
+                        android:layout_height="@dimen/_25sdp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:layout_marginEnd="@dimen/_43sdp"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/mute" />
+
+
+
+                </RelativeLayout>
+
+                <!--                <androidx.constraintlayout.widget.ConstraintLayout-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="@dimen/_200sdp"-->
+                <!--                    android:layout_above="@id/icone">-->
+
+                <!--                    <com.video.selfads.TextureVideoView-->
+                <!--                        android:id="@+id/ad_media"-->
+                <!--                        android:layout_width="match_parent"-->
+                <!--                        android:layout_height="match_parent"-->
+                <!--                        android:visibility="visible" />-->
+
+                <!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
 
 
 

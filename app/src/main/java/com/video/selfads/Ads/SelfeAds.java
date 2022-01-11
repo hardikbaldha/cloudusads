@@ -20,6 +20,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -576,6 +577,7 @@ public class SelfeAds {
             LayoutInflater inflater = LayoutInflater.from(activity);
             View view = inflater.inflate(R.layout.common_admob_native, null);
 
+            LinearLayout re_main_layout = view.findViewById(R.id.re_main_layout);
             ScalableVideoView ad_media = view.findViewById(R.id.ad_media);
             TextView ad_headline = view.findViewById(R.id.ad_headline);
             TextView ad_body = view.findViewById(R.id.ad_body);
@@ -590,6 +592,14 @@ public class SelfeAds {
             TextView ad_advertiser = view.findViewById(R.id.ad_advertiser);
 
             ApiCall(1, nativeArrayArrayList.get(native_pos).getId());
+
+            re_main_layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(SelfeAds.InfoLink));
+                    activity.startActivity(intent);
+                }
+            });
 
 
             im_open_link.setOnClickListener(v -> {
@@ -635,11 +645,20 @@ public class SelfeAds {
             ImageView ad_media = view.findViewById(R.id.ad_media_banner);
             TextView ad_headline = view.findViewById(R.id.ad_name);
             TextView ad_body = view.findViewById(R.id.ad_body);
+            RelativeLayout re_main_layout = view.findViewById(R.id.re_main_layout);
             TextView ad_call_to_action = view.findViewById(R.id.ad_call_to_action);
 
             ImageView im_open_link = view.findViewById(R.id.im_open_link);
 
             ApiCall(1, bannerArrayArrayList.get(native_pos).getId());
+
+            re_main_layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(SelfeAds.InfoLink));
+                    activity.startActivity(intent);
+                }
+            });
 
 
             im_open_link.setOnClickListener(v -> {
