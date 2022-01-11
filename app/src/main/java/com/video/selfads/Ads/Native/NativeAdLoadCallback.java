@@ -1,4 +1,4 @@
-package com.video.selfads.Ads;
+package com.video.selfads.Ads.Native;
 
 public interface NativeAdLoadCallback {
     void onAdLoaded();
